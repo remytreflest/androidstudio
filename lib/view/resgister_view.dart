@@ -14,6 +14,8 @@ class _MyRegisterViewState extends State<MyRegisterView> {
   //variable
   TextEditingController mail = TextEditingController();
   TextEditingController password = TextEditingController();
+  TextEditingController nom = TextEditingController();
+  TextEditingController prenom = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +47,44 @@ class _MyRegisterViewState extends State<MyRegisterView> {
 
                                         image :NetworkImage("https://tse1.mm.bing.net/th?id=OIP.zRmpjD_EOxCboGENHfjxHAHaEc&pid=Api"),
                                         fit : BoxFit.fill
+                                    )
+
+                                )
+
+                            ),
+                          ),
+                          const SizedBox(height : 15),
+
+                          //adresse mail
+                          MyAnimationController(
+                            delay: 2,
+                            child: TextField(
+                                controller: prenom,
+                                decoration : InputDecoration(
+                                    hintText: "Entrer votre prenom",
+                                    prefixIcon : const Icon(Icons.person),
+                                    border : OutlineInputBorder(
+                                      borderRadius : BorderRadius.circular(15),
+
+                                    )
+
+                                )
+
+                            ),
+                          ),
+                          const SizedBox(height : 15),
+
+                          //adresse mail
+                          MyAnimationController(
+                            delay: 2,
+                            child: TextField(
+                                controller: nom,
+                                decoration : InputDecoration(
+                                    hintText: "Entrer votre nom",
+                                    prefixIcon : const Icon(Icons.person),
+                                    border : OutlineInputBorder(
+                                      borderRadius : BorderRadius.circular(15),
+
                                     )
 
                                 )
@@ -123,7 +163,7 @@ class _MyRegisterViewState extends State<MyRegisterView> {
                               delay: 6,
                               child: TextButton(
                                 onPressed: (){
-                                  FirestoreHelper().register(mail.text, password.text);
+                                  FirestoreHelper().register(mail.text, password.text,nom.text,prenom.text);
                                 },
                                 child: const Text("Inscription"),
                               )

@@ -11,8 +11,21 @@ class FirestoreHelper{
 
 
   //inscription
-  register(String email , String password){
-    auth.createUserWithEmailAndPassword(email: email, password: password);
+  register(String email , String password, String nom, String prenom) async {
+    UserCredential resultat = await auth.createUserWithEmailAndPassword(email: email, password: password);
+
+    String uid = resultat.user?.uid ?? "";
+    Map<String,dynamic> map = {
+      "EMAIL":email,
+      "NOM": nom,
+      "PRENOM":prenom,
+    };
+    addUser(uid, map);
+
+  }
+
+  addUser(String uid, Map<String,dynamic> data){
+    cloudUsers.doc(uid).set(data);
 
   }
 

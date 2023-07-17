@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ipssisqy2023/controller/animation_controller.dart';
+import 'package:ipssisqy2023/controller/firestore_helper.dart';
 import 'package:ipssisqy2023/view/dashboard_view.dart';
 
 class MyRegisterView extends StatefulWidget {
@@ -122,7 +123,7 @@ class _MyRegisterViewState extends State<MyRegisterView> {
                               delay: 6,
                               child: TextButton(
                                 onPressed: (){
-                                  print("isncription");
+                                  FirestoreHelper().register(mail.text, password.text);
                                 },
                                 child: const Text("Inscription"),
                               )

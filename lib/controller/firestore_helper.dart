@@ -1,5 +1,7 @@
 //classe qui va nou aider à la gestion de la base de donnée
 
+import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -24,6 +26,14 @@ class FirestoreHelper{
     addUser(uid, map);
     return getUser(uid);
 
+
+  }
+
+  Future<String> stockageData(String ref, String uid, String nameData, Uint8List bytesData) async{
+
+     TaskSnapshot snapshot= await storage.ref("$ref/$uid/$nameData").putData(bytesData);
+     String urlData = await snapshot.ref.getDownloadURL();
+     return urlData;
 
   }
 

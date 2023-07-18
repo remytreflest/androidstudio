@@ -27,6 +27,11 @@ class FirestoreHelper{
 
   }
 
+  updateUser(String uid , Map<String,dynamic> data){
+     cloudUsers.doc(uid).update(data);
+
+  }
+
   Future<MyUser>connect(String email , String password) async {
      UserCredential resultat = await auth.signInWithEmailAndPassword(email: email, password: password);
      String uid = resultat.user?.uid ?? "";

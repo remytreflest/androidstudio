@@ -1,5 +1,6 @@
 
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ipssisqy2023/globale.dart';
 
 class MyUser {
@@ -13,12 +14,37 @@ class MyUser {
   Gender genre = Gender.indefini;
 
 
+
+  String get fullName {
+    return prenom + " "+ nom;
+  }
+
+
   //
-  myUser(){
+  MyUser.empty(){
     id = "";
     mail = "";
     nom = "";
     prenom = "";
+  }
+
+  MyUser(DocumentSnapshot snapshot){
+    id = snapshot.id;
+    Map<String,dynamic> map = snapshot.data() as Map<String,dynamic>;
+    mail = map["EMAIL"];
+    nom = map["NOM"];
+    prenom = map["PRENOM"];
+    String? provisoirePseudo =  map["PSEUDO"];
+    if(provisoirePseudo == null){
+      pseudo = "";
+    }
+    else
+      {
+        pseudo = provisoirePseudo;
+      }
+    birthday = map["BIRTHDAY"] ?? DateTime.now();
+    avatar = map["AVATAR"] ?? defaultImage;
+
   }
 
 

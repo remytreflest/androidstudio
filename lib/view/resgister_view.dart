@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ipssisqy2023/controller/animation_controller.dart';
 import 'package:ipssisqy2023/controller/firestore_helper.dart';
+import 'package:ipssisqy2023/globale.dart';
 import 'package:ipssisqy2023/view/dashboard_view.dart';
 
 class MyRegisterView extends StatefulWidget {
@@ -147,12 +148,23 @@ class _MyRegisterViewState extends State<MyRegisterView> {
                                 ),
 
                                 onPressed : (){
-                                  Navigator.push(context,MaterialPageRoute(
-                                      builder : (context){
-                                        return const MyDashBoardView();
-                                      }
+                                  FirestoreHelper().connect(mail.text, password.text).then((value){
+                                    setState(() {
+                                      me = value;
+                                    });
+                                    Navigator.push(context,MaterialPageRoute(
+                                        builder : (context){
+                                          return const MyDashBoardView();
+                                        }
 
-                                  ));
+                                    ));
+                                  }).catchError((onError){
+                                    print(onError);
+                                  });
+
+
+
+
                                 },
 
                                 child : const Text("Connexion")

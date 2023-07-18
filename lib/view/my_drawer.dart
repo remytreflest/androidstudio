@@ -1,3 +1,4 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:ipssisqy2023/controller/firestore_helper.dart';
 import 'package:ipssisqy2023/globale.dart';
@@ -13,6 +14,13 @@ class _MyDrawerState extends State<MyDrawer> {
   //variable
   bool isSript = false;
   TextEditingController pseudo = TextEditingController();
+
+  //fonction
+  accesPhoto(){
+    FilePicker.platform.pickFiles(
+      type: FileType.image
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -21,9 +29,15 @@ class _MyDrawerState extends State<MyDrawer> {
               children: [
                 Column(
                   children: [
-                    CircleAvatar(
-                      radius: 80,
-                      backgroundImage: NetworkImage(me.avatar ?? defaultImage),
+                    InkWell(
+                      onTap: (){
+                        print("J'ai appuyé");
+                        accesPhoto();
+                      },
+                      child: CircleAvatar(
+                        radius: 80,
+                        backgroundImage: NetworkImage(me.avatar ?? defaultImage),
+                      ),
                     ),
                   ],
                 ),

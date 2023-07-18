@@ -10,6 +10,17 @@ class MyDashBoardView extends StatefulWidget {
 class _MyDashBoardViewState extends State<MyDashBoardView> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
+      backgroundColor: Colors.purple,
+      body: bodyPage(),
+    );
+  }
+
+  Widget bodyPage(){
+    return Text("Ma body Page");
   }
 }

@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ipssisqy2023/controller/animation_controller.dart';
 import 'package:ipssisqy2023/controller/firestore_helper.dart';
@@ -17,6 +20,51 @@ class _MyRegisterViewState extends State<MyRegisterView> {
   TextEditingController password = TextEditingController();
   TextEditingController nom = TextEditingController();
   TextEditingController prenom = TextEditingController();
+
+
+  //fonction
+  MyPopError(dynamic erreur){
+    showDialog(
+      barrierDismissible: false,
+        context: context,
+        builder: (context){
+          if(Platform.isIOS){
+            return CupertinoAlertDialog(
+              title: const Text("Erreur de connexion"),
+              content: Text(erreur.toString()),
+              actions: [
+                TextButton(
+                    onPressed: (){
+                      Navigator.pop(context);
+
+                    },
+                    child: const Text("OK")
+                )
+              ],
+
+            );
+          }
+          else
+            {
+              return AlertDialog(
+                title: const Text("Erreur de connexion"),
+                content: Text(erreur.toString()),
+                actions: [
+                  TextButton(
+                      onPressed: (){
+                        Navigator.pop(context);
+
+                      },
+                      child: const Text("OK")
+                  )
+                ],
+
+              );
+            }
+
+        }
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -160,6 +208,7 @@ class _MyRegisterViewState extends State<MyRegisterView> {
                                     ));
                                   }).catchError((onError){
                                     print(onError);
+                                    MyPopError(onError);
                                   });
 
 
@@ -175,7 +224,20 @@ class _MyRegisterViewState extends State<MyRegisterView> {
                               delay: 6,
                               child: TextButton(
                                 onPressed: (){
-                                  FirestoreHelper().register(mail.text, password.text,nom.text,prenom.text);
+
+                                  FirestoreHelper().register(mail.text, password.text,nom.text,prenom.text).then((value){
+                                    setState(() {
+                                      me = value;
+                                    });
+                                    Navigator.push(context,MaterialPageRoute(
+                                        builder : (context){
+                                          return const MyDashBoardView();
+                                        }
+
+                                    ));
+                                  }).catchError((onError){
+                                    print(onError);
+                                  });
                                 },
                                 child: const Text("Inscription"),
                               )

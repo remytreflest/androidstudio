@@ -204,7 +204,6 @@ class _MyRegisterViewState extends State<MyRegisterView> {
                                         builder : (context){
                                           return const MyDashBoardView();
                                         }
-
                                     ));
                                   }).catchError((onError){
                                     print(onError);

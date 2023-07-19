@@ -39,7 +39,6 @@ class FirestoreHelper{
 
   updateUser(String uid , Map<String,dynamic> data){
      cloudUsers.doc(uid).update(data);
-
   }
 
   Future<MyUser>connect(String email , String password) async {
@@ -57,7 +56,6 @@ class FirestoreHelper{
 
   addUser(String uid, Map<String,dynamic> data){
     cloudUsers.doc(uid).set(data);
-
   }
 
 

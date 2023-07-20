@@ -48,7 +48,6 @@ class FirestoreHelper{
 
   }
 
-
   Future<MyUser>getUser(String uid) async {
      DocumentSnapshot snapshot = await cloudUsers.doc(uid).get();
      return MyUser(snapshot);

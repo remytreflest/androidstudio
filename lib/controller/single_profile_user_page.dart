@@ -6,7 +6,9 @@ import '../model/my_user.dart';
 
 class SingleProfileUserPage extends StatefulWidget {
   MyUser user;
-  SingleProfileUserPage(this.user, {super.key});
+  int optionalIndex = 0;
+  SingleProfileUserPage(this.user, this.optionalIndex, {super.key});
+
 
   @override
   State<SingleProfileUserPage> createState() => _SingleProfileUserPageState();
@@ -17,6 +19,11 @@ class _SingleProfileUserPageState extends State<SingleProfileUserPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    setState(() {
+      currentIndex = widget.optionalIndex == 0 ? currentIndex : widget.optionalIndex;
+    });
+
     return Scaffold(
       appBar: AppBar(
           title: Text(widget.user.fullName),
@@ -25,7 +32,7 @@ class _SingleProfileUserPageState extends State<SingleProfileUserPage> {
       ),
       body: bodyPage(),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: currentIndex,
+        currentIndex: widget.optionalIndex == 0 ? currentIndex : widget.optionalIndex,
         onTap: (index){
           setState(() {
             currentIndex = index;

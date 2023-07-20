@@ -14,6 +14,7 @@ class SingleProfileUserMessagerie extends StatefulWidget {
 class _SingleProfileUserMessagerieState extends State<SingleProfileUserMessagerie> {
 
   TextEditingController messageController = TextEditingController();
+  List<Map<String, dynamic>> myMessages = [];
   List<Map<String, dynamic>> messages = [];
 
   @override
@@ -34,6 +35,7 @@ class _SingleProfileUserMessagerieState extends State<SingleProfileUserMessageri
           for(Map<String, dynamic> messageMap in me.messages![key_1]){
             messageMap["ISME"] = 1;
             messages.add(messageMap);
+            myMessages.add(messageMap);
           }
         }
       }
@@ -79,24 +81,24 @@ class _SingleProfileUserMessagerieState extends State<SingleProfileUserMessageri
         ),
 
         Flexible(
-          child: Container(
+          child: Column(
+            children: [
+              TextField(
+                  controller: messageController,
+                  maxLines: null,
+                  decoration : InputDecoration(
+                      hintText: "Entrer votre message",
+                      prefixIcon : const Icon(Icons.person),
+                      border : OutlineInputBorder(
+                        borderRadius : BorderRadius.circular(15),
+                      )
+                  )
+              ),
+              TextButton(onPressed: (){
+                // INSERTION EN BDD
 
-            color: Colors.white10,
-            child: TextField(
-                controller: messageController,
-                maxLines: null,
-                decoration : InputDecoration(
-                    hintText: "Entrer votre message",
-                    prefixIcon : const Icon(Icons.person),
-                    border : OutlineInputBorder(
-                      borderRadius : BorderRadius.circular(15),
-
-                    )
-
-                )
-
-            ),
-
+              }, child: Text("Envoyer Message"))
+            ],
           ),
         )
       ],

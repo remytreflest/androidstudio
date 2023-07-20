@@ -57,7 +57,7 @@ class _MyFavoritesState extends State<MyFavorites> {
                       onPressed: (){
                         Navigator.push(context,MaterialPageRoute(
                           builder : (context){
-                            return SingleProfileUserPage(otherUser);
+                            return SingleProfileUserPage(otherUser, 0);
                           }
                         ));
                       },

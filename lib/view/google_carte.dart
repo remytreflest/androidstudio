@@ -45,6 +45,12 @@ class _GoogleCarteState extends State<GoogleCarte> {
       List documents = snap.data?.docs ?? [];
       for(var data in documents){
         MyUser user = MyUser(data);
+
+        // Pour ne pas mettre son propre point sur la map, on saute toutes les instructions suivantes
+        if(user.id == me.id){
+          continue;
+        }
+
         double lat = (Random().nextDouble() / 2) + 48;
         double lng = (Random().nextDouble() / 2)+ 1;
         _markers.add(

@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:ipssisqy2023/controller/firestore_helper.dart';
 
 import '../globale.dart';
 import '../model/my_user.dart';
@@ -22,7 +24,7 @@ class _SingleProfileUserMessagerieState extends State<SingleProfileUserMessageri
 
     if(widget.user.messages != null){
       for(String key_1 in widget.user.messages!.keys){
-        for(Map<String, dynamic> messageMap in widget.user.messages![key_1]){
+        for(Map<String, dynamic> messageMap in widget.user.messages![key_1]!){
           messageMap["ISME"] = 0;
           messages.add(messageMap);
         }
@@ -31,8 +33,10 @@ class _SingleProfileUserMessagerieState extends State<SingleProfileUserMessageri
 
     if(me.messages != null){
       for(String key_1 in me.messages!.keys){
+        print("key_1 : " + key_1.toString());
+        print("widget.user.id : " + widget.user.id);
         if(key_1.trim() == widget.user.id){
-          for(Map<String, dynamic> messageMap in me.messages![key_1]){
+          for(Map<String, dynamic> messageMap in me.messages![key_1]!){
             messageMap["ISME"] = 1;
             messages.add(messageMap);
             myMessages.add(messageMap);
@@ -56,6 +60,7 @@ class _SingleProfileUserMessagerieState extends State<SingleProfileUserMessageri
       children: [
         Expanded(
           child: ListView.builder(
+              // TODO controller pour voir le dernier message lorsqu'un message ets ajouté
               itemCount: messages.length,
               itemBuilder: (context,index){
                 Map<String, dynamic> message = messages[index];
@@ -94,8 +99,43 @@ class _SingleProfileUserMessagerieState extends State<SingleProfileUserMessageri
                       )
                   )
               ),
-              TextButton(onPressed: (){
+              TextButton(onPressed: () {
                 // INSERTION EN BDD
+                if(messageController.text.isNotEmpty){
+
+                  if(me.messages.isEmpty || me.messages[widget.user.id] == null){
+                    setState(() {
+                      me.messages[widget.user.id] = [
+                        {
+                          "DATE" : Timestamp.fromDate(DateTime.now()),
+                          "MESSAGE" : messageController.text
+                        }
+                      ];
+                    });
+
+                    return;
+                  }
+
+                  setState(() {
+                    me.messages![widget.user.id]!.add({
+                      "DATE" : Timestamp.fromDate(DateTime.now()),
+                      "MESSAGE" : messageController.text
+                    });
+                    messages.add({
+                      "DATE" : Timestamp.fromDate(DateTime.now()),
+                      "MESSAGE" : messageController.text,
+                      "ISME" : 1
+                    });
+                  });
+
+                  Map<String, Map<String, List<Map<String,dynamic>>>> toUpdate = {
+                    "MESSAGES" : me.messages
+                  };
+                  print("JACQUES");
+                  FirestoreHelper().updateUser(me.id, toUpdate);
+                  messageController.text = "";
+                }
+
 
               }, child: Text("Envoyer Message"))
             ],

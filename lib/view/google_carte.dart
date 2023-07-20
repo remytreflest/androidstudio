@@ -30,101 +30,13 @@ class _GoogleCarteState extends State<GoogleCarte> {
 
     camera = CameraPosition(
       target: LatLng(widget.location.latitude, widget.location.longitude),
-      zoom: 10
+      zoom: 9
     );
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-/*
-    List<Marker> markers = [];
-
-    // Coordonnée proche d'Auneau
-    double Lat = Random().nextDouble() + 48;
-    double Lng = Random().nextDouble() + 1;
-    for(int i = 0; i <= users.length; i++){
-      markers.add(
-        Marker(
-          markerId: MarkerId(me.fullName),
-          position: LatLng(Lat, Lng),
-          onTap: () async {
-            return await showDialog(
-            barrierDismissible: true,
-            context: context,
-            builder: (context){
-              TextEditingController text = TextEditingController();
-              return AlertDialog(
-                title: Text(me.fullName),
-                content: Container(
-                  height: MediaQuery.of(context).size.height * 0.5,
-                  child: Column(
-                    children: [
-                      TextField(
-                      controller: text,
-                      decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: 'Ecrivez votre message'
-                      ),
-                      ),
-                      TextButton(onPressed: (){
-                      setState(() {
-                      // TODO envoyer en base de données le message
-                      text.text = "";
-                      });
-                      }, child: Text("Envoyez"))
-                    ],
-                  ),
-                ),
-
-                );
-              }
-            );
-            }
-        )
-      );
-    }
-*/
-    /*Marker marker = Marker(
-        markerId: MarkerId(me.fullName),
-        position: LatLng(Lat, Lng),
-        onTap: () async {
-          return await showDialog(
-              barrierDismissible: true,
-              context: context,
-              builder: (context){
-                TextEditingController text = TextEditingController();
-                return AlertDialog(
-                  title: Text(me.fullName),
-                  content: Container(
-                    height: MediaQuery.of(context).size.height * 0.5,
-                    child: Column(
-                      children: [
-                        TextField(
-                          controller: text,
-                          decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              hintText: 'Ecrivez votre message'
-                          ),
-                        ),
-                        TextButton(onPressed: (){
-                          setState(() {
-                            // TODO envoyer en base de données le message
-                            text.text = "";
-                          });
-                        }, child: Text("Envoyez"))
-                      ],
-                    ),
-                  ),
-
-                );
-              }
-          );
-        }
-    );*/
-
-
-
 
   return StreamBuilder<QuerySnapshot>(
     stream: FirestoreHelper().cloudUsers.snapshots(),
@@ -133,8 +45,8 @@ class _GoogleCarteState extends State<GoogleCarte> {
       List documents = snap.data?.docs ?? [];
       for(var data in documents){
         MyUser user = MyUser(data);
-        double lat = Random().nextDouble() + 48;
-        double lng = Random().nextDouble() + 1;
+        double lat = (Random().nextDouble() / 2) + 48;
+        double lng = (Random().nextDouble() / 2)+ 1;
         _markers.add(
           Marker(
               markerId: MarkerId(user.fullName),
@@ -164,20 +76,5 @@ class _GoogleCarteState extends State<GoogleCarte> {
     }
   );
 
-
-
-    /*return GoogleMap(
-      initialCameraPosition: camera,
-      myLocationButtonEnabled: true,
-      myLocationEnabled: true,
-      onMapCreated: (control) async {
-        String style = await DefaultAssetBundle.of(context).loadString("lib/map_style.json");
-        control.setMapStyle(style);
-        completer.complete(control);
-      },
-      markers: {
-        marker
-      },
-    );*/
   }
 }

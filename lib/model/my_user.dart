@@ -16,7 +16,7 @@ class MyUser {
   String? avatar;
   Gender genre = Gender.indefini;
   List favoris = [];
-  Map<String, dynamic>? messages;
+  late Map<String, List<Map<String,dynamic>>> messages;
 
 
 
@@ -31,6 +31,7 @@ class MyUser {
     mail = "";
     nom = "";
     prenom = "";
+    messages = {};
   }
 
   MyUser(DocumentSnapshot snapshot){
@@ -51,8 +52,29 @@ class MyUser {
     Timestamp? birthdayProvisoire = map["BIRTHDAY"];
     birthday = map["BIRTHDAY"] == null ? DateTime.now() : (map["BIRTHDAY"] as Timestamp).toDate();
     avatar = map["AVATAR"] ?? defaultImage;
-    messages = map["MESSAGES"];
+    /*("JOSHUA");
+    for(var key in map["MESSAGES"].keys){
+      print("KEY " + key.toString());
+    }
+    print(map["MESSAGES"].toString());*/
+    messages = map["MESSAGES"] != null ? parseJsonMessagesData(map["MESSAGES"]) : {};
   }
 
+  Map<String, List<Map<String,dynamic>>> parseJsonMessagesData(var data){
+
+    Map<String, List<Map<String,dynamic>>> result = <String, List<Map<String,dynamic>>>{};
+
+    for(var key in data.keys){
+      List<Map<String, dynamic>> userConversation = [];
+      for(int i = 0; i < data[key].length; i++){
+        userConversation.add({
+          "DATE" : data[key][i]["DATE"],
+          "MESSAGE" : data[key][i]["MESSAGE"]
+        });
+      }
+      result[key] = userConversation;
+    }
+    return result;
+  }
 
 }

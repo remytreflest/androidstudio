@@ -19,11 +19,6 @@ class _SingleProfileUserPageState extends State<SingleProfileUserPage> {
 
   @override
   Widget build(BuildContext context) {
-
-    setState(() {
-      currentIndex = widget.optionalIndex == 0 ? currentIndex : widget.optionalIndex;
-    });
-
     return Scaffold(
       appBar: AppBar(
           title: Text(widget.user.fullName),
@@ -32,7 +27,7 @@ class _SingleProfileUserPageState extends State<SingleProfileUserPage> {
       ),
       body: bodyPage(),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: widget.optionalIndex == 0 ? currentIndex : widget.optionalIndex,
+        currentIndex: currentIndex,
         onTap: (index){
           setState(() {
             currentIndex = index;

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ipssisqy2023/controller/firestore_helper.dart';
 import 'package:ipssisqy2023/controller/single_profile_user_page.dart';
-import 'package:ipssisqy2023/controller/single_user_profile.dart';
 import 'package:ipssisqy2023/globale.dart';
 import 'package:ipssisqy2023/model/my_user.dart';
 
@@ -18,8 +17,7 @@ class _MyFavoritesState extends State<MyFavorites> {
 
   @override
   void initState() {
-    // TODO: implement initState
-    for(String uid in me.favoris!){
+    for(String uid in me.favoris){
       FirestoreHelper().getUser(uid).then((value){
         setState(() {
           maListeAmis.add(value);

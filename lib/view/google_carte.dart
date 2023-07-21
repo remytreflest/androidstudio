@@ -37,7 +37,7 @@ class _GoogleCarteState extends State<GoogleCarte> {
 
   @override
   Widget build(BuildContext context) {
-
+  // Fetch the Custom Marker Icon
   late BitmapDescriptor  customIcon;
   BitmapDescriptor.fromAssetImage(const ImageConfiguration(size: Size(16, 16)),
       'assets/man.png')
@@ -45,6 +45,7 @@ class _GoogleCarteState extends State<GoogleCarte> {
     customIcon = d;
   });
 
+  // Generate map with markers
   return StreamBuilder<QuerySnapshot>(
     stream: FirestoreHelper().cloudUsers.snapshots(),
     builder: (context, snap) {

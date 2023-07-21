@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:ipssisqy2023/controller/firestore_helper.dart';
 
 import '../globale.dart';
@@ -15,6 +16,7 @@ class SingleProfileUserMessagerie extends StatefulWidget {
 
 class _SingleProfileUserMessagerieState extends State<SingleProfileUserMessagerie> {
 
+  final df = new DateFormat('dd-MM-yyyy hh:mm a');
   TextEditingController messageController = TextEditingController();
   final ScrollController _controller = ScrollController();
   List<Map<String, dynamic>> myMessages = [];
@@ -73,8 +75,13 @@ class _SingleProfileUserMessagerieState extends State<SingleProfileUserMessageri
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Expanded(
+        Flexible(
+          flex: 2,
           child: ListView.builder(
+            padding: const EdgeInsets.only(
+              top: 6,
+              bottom: 6
+            ),
             controller: _controller,
               itemCount: messages.length,
               itemBuilder: (context,index){
@@ -82,16 +89,30 @@ class _SingleProfileUserMessagerieState extends State<SingleProfileUserMessageri
                 return Container(
                   width: MediaQuery.of(context).size.width,
                   padding: EdgeInsets.all(5),
-                  margin: EdgeInsets.all(3),
+                  margin: EdgeInsets.only(
+                      left: message["ISME"] != 1 ? 6 : MediaQuery.of(context).size.width / 4,
+                      right: message["ISME"] == 1 ? 6 : MediaQuery.of(context).size.width / 4,
+                      top: 3,
+                      bottom: 3),
                   decoration: BoxDecoration(
                       color: (message["ISME"] == 1 ? Colors.amberAccent : Colors.greenAccent),
                       borderRadius: BorderRadius.circular(15)
                   ),
-                  child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
                     child: Column(
                       children: [
-                        ListTile( title: Text('${DateTime.parse(message["DATE"].toDate().toString())}')),
-                        ListTile(title: Text(message["MESSAGE"])),
+                        Padding(
+                          padding: const EdgeInsets.only( bottom: 10),
+                          child: Align(
+                            alignment: Alignment.topLeft,
+                              child: Text(df.format(DateTime.parse(message["DATE"].toDate().toString())))
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.bottomLeft,
+                            child: Text(message["MESSAGE"])
+                        ),
                       ],
                     ),
                   ),
@@ -100,64 +121,68 @@ class _SingleProfileUserMessagerieState extends State<SingleProfileUserMessageri
           ),
         ),
 
-        Flexible(
-          child: Column(
-            children: [
-              TextField(
-                  controller: messageController,
-                  maxLines: null,
-                  decoration : InputDecoration(
-                      hintText: "Entrer votre message",
-                      prefixIcon : const Icon(Icons.person),
-                      border : OutlineInputBorder(
-                        borderRadius : BorderRadius.circular(15),
-                      )
-                  )
-              ),
-              TextButton(onPressed: () {
-                // INSERTION EN BDD
-                if(messageController.text.isNotEmpty){
+        Align(
+          alignment: FractionalOffset.bottomCenter,
+          child: Padding(
+            padding: const EdgeInsets.all(3.0),
+            child: Column(
+              children: [
+                TextField(
+                    controller: messageController,
+                    maxLines: null,
+                    decoration : InputDecoration(
+                        hintText: "Entrer votre message",
+                        prefixIcon : const Icon(Icons.person),
+                        border : OutlineInputBorder(
+                          borderRadius : BorderRadius.circular(15),
+                        )
+                    )
+                ),
+                TextButton(onPressed: () {
+                  // INSERTION EN BDD
+                  if(messageController.text.isNotEmpty){
 
-                  if(me.messages.isEmpty || me.messages[widget.user.id] == null){
+                    if(me.messages.isEmpty || me.messages[widget.user.id] == null){
 
-                    setState(() {
-                      me.messages[widget.user.id] = [
-                        {
+                      setState(() {
+                        me.messages[widget.user.id] = [
+                          {
+                            "DATE" : Timestamp.fromDate(DateTime.now()),
+                            "MESSAGE" : messageController.text
+                          }
+                        ];
+                      });
+                    } else {
+
+                      setState(() {
+                        me.messages![widget.user.id]!.add({
                           "DATE" : Timestamp.fromDate(DateTime.now()),
                           "MESSAGE" : messageController.text
-                        }
-                      ];
-                    });
+                        });
+                      });
 
-                  } else {
+                    }
+
+                    Map<String, Map<String, List<Map<String,dynamic>>>> toUpdate = {
+                      "MESSAGES" : me.messages
+                    };
+                    FirestoreHelper().updateUser(me.id, toUpdate);
 
                     setState(() {
-                      me.messages![widget.user.id]!.add({
+                      messages.add({
                         "DATE" : Timestamp.fromDate(DateTime.now()),
-                        "MESSAGE" : messageController.text
+                        "MESSAGE" : messageController.text,
+                        "ISME" : 1
                       });
+                      messageController.text = "";
+                      _scrollDown();
+                      FocusScope.of(context).requestFocus(FocusNode());
                     });
-
                   }
 
-                  Map<String, Map<String, List<Map<String,dynamic>>>> toUpdate = {
-                    "MESSAGES" : me.messages
-                  };
-                  FirestoreHelper().updateUser(me.id, toUpdate);
-
-                  setState(() {
-                    messages.add({
-                      "DATE" : Timestamp.fromDate(DateTime.now()),
-                      "MESSAGE" : messageController.text,
-                      "ISME" : 1
-                    });
-                    messageController.text = "";
-                    _scrollDown();
-                  });
-                }
-
-              }, child: Text("Envoyer Message"))
-            ],
+                }, child: Text("Envoyer Message"))
+              ],
+            ),
           ),
         )
       ],

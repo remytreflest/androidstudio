@@ -17,7 +17,7 @@ class _MyMapViewState extends State<MyMapView> {
       future: PermissionGps().init(),
         builder: (context, snap){
           if(snap.data == null){
-            return const Center(child: Text("Aucune données"));
+            return const Center(child: Text("En cours de chargement..."));
           } else {
             Position location = snap.data!;
             return GoogleCarte(location: location);

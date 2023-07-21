@@ -13,6 +13,7 @@ class MyFavorites extends StatefulWidget {
 }
 
 class _MyFavoritesState extends State<MyFavorites> {
+
   List<MyUser> maListeAmis = [];
 
   @override
@@ -30,30 +31,33 @@ class _MyFavoritesState extends State<MyFavorites> {
 
   @override
   Widget build(BuildContext context) {
+
+    var size = MediaQuery.of(context).size;
+    final double itemHeight = (size.height - kToolbarHeight - 24) / 15;
+    final double itemWidth = size.width / 2;
+
     return GridView.builder(
         itemCount: maListeAmis.length,
         padding: EdgeInsets.all(10),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 5, mainAxisSpacing: 5),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 1,
+            crossAxisSpacing: 5,
+            mainAxisSpacing: 5,
+            childAspectRatio: (itemWidth / itemHeight),
+        ),
         itemBuilder: (context,index){
           MyUser otherUser = maListeAmis[index];
           return Container(
-            padding: EdgeInsets.all(5),
+            padding: EdgeInsets.all(3),
             decoration: BoxDecoration(
                 color: Colors.amberAccent,
                 borderRadius: BorderRadius.circular(15)
             ),
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircleAvatar(
-                    // radius: MediaQuery.of(context).size.height * 0.025,
-                    radius: 40,
-                    backgroundImage: NetworkImage(otherUser.avatar ?? defaultImage),
-                  ),
-                  const SizedBox(height : 10),
-                  Text(otherUser.fullName),
-                  TextButton(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Flexible(
+                  child: TextButton(
                       onPressed: (){
                         Navigator.push(context,MaterialPageRoute(
                           builder : (context){
@@ -61,10 +65,15 @@ class _MyFavoritesState extends State<MyFavorites> {
                           }
                         ));
                       },
-                      child: const Icon(Icons.person, size: 50)
-                  )
-                ],
-              ),
+                      child: Column(
+                        children: [
+                          const Icon(Icons.person, size: 50),
+                          Text(otherUser.fullName),
+                        ],
+                      )
+                  ),
+                )
+              ],
             ),
           );
         }
